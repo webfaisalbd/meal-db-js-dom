@@ -20,19 +20,46 @@ searchButton.addEventListener('click',function(){
 // display search result 
      const displaySearchResult= meals => {
     //  const searchResult=document.getElementById('search-result');
-     meals.forEach(meal=> {
-        //  console.log(meal);
-        const div=document.createElement('div');
-        div.classList.add('col');
-        div.innerHTML=`<div class="card">
-        <img src="${meal.strMealThumb}" class="card-img-top" alt="...">
-        <div class="card-body">
-          <h5 class="card-title">${meal.strMeal}</h5>
-          <button onClick="loadDetails(${meal.idMeal})" class="btn-success rounded">Meal Details</button>
-        </div>
-      </div>`;
-      searchResult.appendChild(div);
-     })
+     if(meals.length==0){
+      Swal.fire(
+        'Not Found?',
+        'Search another meal',
+        'error'
+      )
+     }
+     else{
+      searchResult.textContent='';
+       if(meals.length<10){
+        meals.forEach(meal=> {
+          //  console.log(meal);
+          const div=document.createElement('div');
+          div.classList.add('col');
+          div.innerHTML=`<div class="card shadow">
+          <img src="${meal.strMealThumb}" class="card-img-top w-50 mx-auto p-2 rounded-circle" alt="...">
+          <div class="card-body">
+            <h5 class="card-title">${meal.strMeal}</h5>
+            <button onClick="loadDetails(${meal.idMeal})" class="btn-success rounded">Meal Details</button>
+          </div>
+        </div>`;
+        searchResult.appendChild(div);
+       })
+       }
+       else{
+        meals.slice(0,10).forEach(meal=> {
+          //  console.log(meal);
+          const div=document.createElement('div');
+          div.classList.add('col');
+          div.innerHTML=`<div class="card shadow">
+          <img src="${meal.strMealThumb}" class="card-img-top w-50 mx-auto p-2 rounded-circle" alt="...">
+          <div class="card-body">
+            <h5 class="card-title">${meal.strMeal}</h5>
+            <button onClick="loadDetails(${meal.idMeal})" class="btn-success rounded">Meal Details</button>
+          </div>
+        </div>`;
+        searchResult.appendChild(div);
+       })
+       }
+     }
 }
 
 
@@ -50,14 +77,15 @@ fetch(url)
 const showLoadDetails= mealDetail => {
     console.log(mealDetail);
     const singleLoadDetails=document.getElementById('singleLoadDetails');
+    singleLoadDetails.textContent='';
     const div=document.createElement('div');
         div.classList.add('col');
-        div.innerHTML=`<div class="card">
-        <img src="${mealDetail.strMealThumb}" class="card-img-top" alt="...">
+        div.innerHTML=`<div class="card shadow">
+        <img src="${mealDetail.strMealThumb}" class="card-img-top w-25 mx-auto p-2 rounded-circle" alt="...">
         <div class="card-body">
           <h5 class="card-title">${mealDetail.strMeal}</h5>
           <p>${mealDetail.strCategory}</p>
-          <p>${mealDetail.strArea}</p>
+          <p>${mealDetail.strArea ?  mealDetail.strArea : "area not found" }</p>
           <p>${mealDetail.strInstructions.slice(0,150)}</p>
 
         </div>
